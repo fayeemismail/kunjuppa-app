@@ -35,11 +35,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+      <div className="fixed top-4 right-4 left-4 sm:left-auto sm:bottom-4 sm:top-auto z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium transition-all duration-300 animate-in slide-in-from-bottom-2 ${
+            className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium transition-all duration-300 animate-in slide-in-from-top-2 sm:slide-in-from-bottom-2 ${
               toast.type === 'success'
                 ? 'bg-emerald-950/90 text-emerald-100 border-emerald-800'
                 : toast.type === 'error'

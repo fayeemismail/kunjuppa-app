@@ -223,7 +223,7 @@ function ProductsPageContent() {
               className={`px-3.5 py-1.5 rounded-lg transition ${
                 activeTab === 'active'
                   ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-800'
+                  : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60'
               }`}
             >
               Active ({products.filter((p) => !p.isDeleted).length})
@@ -234,7 +234,7 @@ function ProductsPageContent() {
               className={`px-3.5 py-1.5 rounded-lg transition ${
                 activeTab === 'archived'
                   ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-800'
+                  : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60'
               }`}
             >
               Archived ({products.filter((p) => p.isDeleted).length})
@@ -267,7 +267,7 @@ function ProductsPageContent() {
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -378,12 +378,12 @@ function ProductsPageContent() {
                       {/* Stock Level */}
                       <td className="py-3 px-3">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 ${
                             isOutOfStock
-                              ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+                              ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60'
                               : isLowStock
-                              ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                              : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                              ? 'bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-200 border border-amber-300 dark:border-amber-700/60'
+                              : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60'
                           }`}
                         >
                           <span
@@ -391,7 +391,7 @@ function ProductsPageContent() {
                               isOutOfStock
                                 ? 'bg-rose-500'
                                 : isLowStock
-                                ? 'bg-amber-500'
+                                ? 'bg-amber-500 animate-pulse'
                                 : 'bg-emerald-500'
                             }`}
                           />
@@ -637,7 +637,7 @@ function ProductsPageContent() {
                   setIsAddModalOpen(false);
                   setEditingProduct(null);
                 }}
-                className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-medium hover:bg-zinc-200"
+                className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
               >
                 Cancel
               </button>
@@ -722,7 +722,7 @@ function ProductsPageContent() {
               <button
                 type="button"
                 onClick={() => setViewingProduct(null)}
-                className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-medium"
+                className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
               >
                 Close
               </button>

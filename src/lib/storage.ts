@@ -18,24 +18,22 @@ export const storage = {
   initializeSeedData: (): void => {
     if (!isBrowser) return;
     try {
-      const alreadySeeded = localStorage.getItem(KEYS.SEEDED);
-      if (!alreadySeeded) {
-        if (!localStorage.getItem(KEYS.PRODUCTS)) {
-          localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(INITIAL_PRODUCTS));
-        }
-        if (!localStorage.getItem(KEYS.CUSTOMERS)) {
-          localStorage.setItem(KEYS.CUSTOMERS, JSON.stringify(INITIAL_CUSTOMERS));
-        }
-        if (!localStorage.getItem(KEYS.ORDERS)) {
-          localStorage.setItem(KEYS.ORDERS, JSON.stringify(INITIAL_ORDERS));
-        }
-        if (!localStorage.getItem(KEYS.SETTINGS)) {
-          localStorage.setItem(KEYS.SETTINGS, JSON.stringify(DEFAULT_SETTINGS));
-        }
+      const currentSettings = localStorage.getItem(KEYS.SETTINGS);
+      const hasAed = currentSettings && currentSettings.includes('AED');
+      const existingProducts = localStorage.getItem(KEYS.PRODUCTS);
+      const hasMarlboro = existingProducts && existingProducts.includes('Marlboro Red');
+
+      // Auto-migrate if first visit, or not yet migrated to true_aed_v5
+      const migrationKey = localStorage.getItem(KEYS.SEEDED);
+      if (migrationKey !== 'true_aed_v5' || !hasAed || !hasMarlboro) {
+        localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(INITIAL_PRODUCTS));
+        localStorage.setItem(KEYS.CUSTOMERS, JSON.stringify(INITIAL_CUSTOMERS));
+        localStorage.setItem(KEYS.ORDERS, JSON.stringify(INITIAL_ORDERS));
+        localStorage.setItem(KEYS.SETTINGS, JSON.stringify(DEFAULT_SETTINGS));
         if (!localStorage.getItem(KEYS.PENDING_ORDERS)) {
           localStorage.setItem(KEYS.PENDING_ORDERS, JSON.stringify([]));
         }
-        localStorage.setItem(KEYS.SEEDED, 'true');
+        localStorage.setItem(KEYS.SEEDED, 'true_aed_v5');
       }
     } catch (e) {
       console.error('Error initializing localStorage seed data:', e);

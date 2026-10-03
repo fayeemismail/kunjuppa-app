@@ -33,10 +33,19 @@ export const PrinterConfigModal: React.FC<PrinterConfigModalProps> = ({
     return () => unsub();
   }, [isOpen]);
 
-  const handleConnect = async () => {
+  const isIOS = printerService.isIOSDevice();
+
+  const handleConnect = async (filterOnly: boolean = true) => {
+    if (isIOS) {
+      showToast(
+        'Apple iOS does not support Web Bluetooth in Safari. Use Browser Print / AirPrint, or open this web app in Bluefy.',
+        'info'
+      );
+      return;
+    }
     setIsConnecting(true);
     try {
-      const res = await printerService.connect();
+      const res = await printerService.connect({ filterPrintersOnly: filterOnly });
       if (res.success) {
         showToast(res.message, 'success');
       } else {
@@ -84,16 +93,16 @@ export const PrinterConfigModal: React.FC<PrinterConfigModalProps> = ({
         <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400">
-              Web Bluetooth Status
+              Hardware Status
             </span>
             <span
               className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${
                 printerStatus === 'connected'
                   ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
+                  : isIOS
+                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300'
                   : printerStatus === 'connecting'
                   ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
-                  : printerStatus === 'unsupported'
-                  ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300'
                   : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
               }`}
             >
@@ -101,20 +110,20 @@ export const PrinterConfigModal: React.FC<PrinterConfigModalProps> = ({
                 className={`w-1.5 h-1.5 rounded-full ${
                   printerStatus === 'connected'
                     ? 'bg-emerald-500'
+                    : isIOS
+                    ? 'bg-blue-500'
                     : printerStatus === 'connecting'
                     ? 'bg-amber-500 animate-pulse'
-                    : printerStatus === 'unsupported'
-                    ? 'bg-rose-500'
                     : 'bg-zinc-400'
                 }`}
               />
               {printerStatus === 'connected'
                 ? `Connected: ${deviceName || 'Thermal Printer'}`
+                : isIOS
+                ? 'Apple iOS (AirPrint)'
                 : printerStatus === 'connecting'
                 ? 'Searching & Pairing...'
-                : printerStatus === 'unsupported'
-                ? 'Web Bluetooth Not Supported'
-                : 'No Printer Connected'}
+                : 'No Bluetooth Printer Connected'}
             </span>
           </div>
 
@@ -132,23 +141,35 @@ export const PrinterConfigModal: React.FC<PrinterConfigModalProps> = ({
                   Disconnect
                 </button>
               </div>
-            ) : (
-              <div>
-                <p className="text-zinc-500 leading-relaxed">
-                  Web Bluetooth allows Chrome and Edge to talk directly to compatible ESC/POS Bluetooth printers.
-                  If your printer uses Bluetooth Classic or USB, use the Browser Print option available on every receipt.
+            ) : isIOS ? (
+              <div className="space-y-1.5 text-zinc-500">
+                <p className="leading-relaxed">
+                  Apple iOS Safari does not support Web Bluetooth. You can print seamlessly to any network or AirPrint printer using <strong className="text-zinc-800 dark:text-zinc-200">Browser Print / AirPrint</strong>, or open this web app in the free <strong className="text-blue-600">Bluefy</strong> browser from the App Store for direct Web Bluetooth.
                 </p>
-                {printerStatus !== 'unsupported' && (
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-zinc-500 leading-relaxed">
+                  Connect your Bluetooth thermal printer (POS-58, MTP, RPP, etc.) for direct wireless receipt printing.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleConnect(true)}
+                  disabled={isConnecting}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs transition active:scale-95 disabled:opacity-50 shadow-xs"
+                >
+                  <Bluetooth className="w-4 h-4" />
+                  {isConnecting ? 'Searching for printers...' : 'Pair Thermal Printer (Filtered)'}
+                </button>
+                <div className="text-center pt-0.5">
                   <button
                     type="button"
-                    onClick={handleConnect}
-                    disabled={isConnecting}
-                    className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-xs transition disabled:opacity-50"
+                    onClick={() => handleConnect(false)}
+                    className="text-[10px] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 underline"
                   >
-                    <Bluetooth className="w-4 h-4" />
-                    {isConnecting ? 'Opening device picker...' : 'Pair Bluetooth Thermal Printer'}
+                    Can&apos;t find printer? Show all devices
                   </button>
-                )}
+                </div>
               </div>
             )}
           </div>
@@ -205,7 +226,7 @@ export const PrinterConfigModal: React.FC<PrinterConfigModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg transition"
+            className="px-4 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg transition"
           >
             Done
           </button>

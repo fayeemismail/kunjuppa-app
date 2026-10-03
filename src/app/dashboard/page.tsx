@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  IndianRupee,
+  Banknote,
   ShoppingBag,
   Package,
   Users,
@@ -105,9 +105,9 @@ export default function DashboardPage() {
         {/* Total Sales Today */}
         <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
           <div className="flex items-center justify-between text-zinc-500 mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider">Today's Sales</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Today&apos;s Sales</span>
             <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
-              <IndianRupee className="w-4 h-4" />
+              <Banknote className="w-4 h-4" />
             </div>
           </div>
           <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
@@ -222,7 +222,7 @@ export default function DashboardPage() {
                         {formatCurrency(order.grandTotal, settings.currencySymbol)}
                       </td>
                       <td className="py-3">
-                        <span className="inline-block uppercase text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
+                        <span className="inline-block uppercase text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
                           {order.paymentMethod}
                         </span>
                       </td>

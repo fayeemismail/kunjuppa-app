@@ -152,13 +152,11 @@ export default function PosPage() {
 
   const totals = getTotals();
 
-  // Add to cart
+  // Add to cart (No toast notification on tap as requested)
   const handleAddToCart = (product: Product) => {
     const res = addItem(product, 1);
     if (!res.success && res.message) {
       showToast(res.message, 'error');
-    } else {
-      showToast(`Added ${product.name}`, 'info');
     }
   };
 
@@ -369,7 +367,7 @@ export default function PosPage() {
           className={`flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
             activeView === 'catalog'
               ? 'bg-emerald-600 text-white shadow-xs'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
+              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/60'
           }`}
         >
           <span>Catalog</span>
@@ -381,7 +379,7 @@ export default function PosPage() {
           className={`flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 relative ${
             activeView === 'cart'
               ? 'bg-emerald-600 text-white shadow-xs'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
+              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/60'
           }`}
         >
           <span>Current Bill</span>
@@ -402,7 +400,7 @@ export default function PosPage() {
           className={`flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 relative ${
             activeView === 'pending'
               ? 'bg-emerald-600 text-white shadow-xs'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
+              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/60'
           }`}
         >
           <Clock className="w-3.5 h-3.5" />
@@ -442,7 +440,7 @@ export default function PosPage() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -486,7 +484,7 @@ export default function PosPage() {
                   className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition ${
                     selectedCategory === cat
                       ? 'bg-emerald-600 text-white shadow-xs'
-                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200'
+                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-100'
                   }`}
                 >
                   {cat}
@@ -495,8 +493,8 @@ export default function PosPage() {
             </div>
           </div>
 
-          {/* Product Grid */}
-          <div className="flex-1 p-3 sm:p-4 overflow-y-auto">
+          {/* Product Grid with safe mobile bottom padding */}
+          <div className="flex-1 p-3 sm:p-4 overflow-y-auto pb-32 lg:pb-4">
             {filteredProducts.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-8 text-zinc-400">
                 <PackageX className="w-10 h-10 mb-2 text-zinc-300 dark:text-zinc-600" />
@@ -575,44 +573,6 @@ export default function PosPage() {
             )}
           </div>
 
-          {/* Floating Mobile Bottom Action Pill */}
-          <div className="lg:hidden p-2.5 bg-zinc-900 dark:bg-zinc-800 border-t border-zinc-800 flex items-center justify-between gap-2 shadow-xl">
-            <div className="flex items-center gap-2 overflow-hidden">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
-                {totals.itemCount}
-              </div>
-              <div className="text-white truncate">
-                <div className="text-xs font-bold leading-tight">
-                  {formatCurrency(totals.grandTotal, settings.currencySymbol)}
-                </div>
-                <div className="text-[10px] text-zinc-400">
-                  {totals.totalQuantity} items • {isWalkIn ? 'Walk-in' : selectedCustomer?.name}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1.5 shrink-0">
-              {cartItems.length > 0 && (
-                <button
-                  type="button"
-                  onClick={handleParkBill}
-                  className="px-2.5 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg text-xs font-semibold flex items-center gap-1"
-                  title="Hold bill and start next customer"
-                >
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Hold</span>
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setActiveView('cart')}
-                className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1"
-              >
-                <span>View Bill</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* ======================================================== */}
@@ -631,7 +591,7 @@ export default function PosPage() {
               className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition ${
                 activeView === 'cart' || activeView === 'catalog'
                   ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-800'
+                  : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60'
               }`}
             >
               Current Bill ({cartItems.length})
@@ -642,7 +602,7 @@ export default function PosPage() {
               className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5 ${
                 activeView === 'pending'
                   ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-800'
+                  : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60'
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
@@ -950,13 +910,13 @@ export default function PosPage() {
           }`}
         >
           {/* Header of Pending Queue */}
-          <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900 flex items-center justify-between">
-            <div>
-              <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-500" />
+          <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900 flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 truncate">
+                <Clock className="w-4 h-4 text-amber-500 shrink-0" />
                 <span>Pending Unprinted Bills Queue ({pendingOrders.length})</span>
               </h3>
-              <p className="text-[11px] text-zinc-500 mt-0.5">
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">
                 Orders held in cart. Print receipts individually, then save to permanent orders.
               </p>
             </div>
@@ -964,9 +924,10 @@ export default function PosPage() {
             <button
               type="button"
               onClick={() => setActiveView('catalog')}
-              className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold"
+              className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold whitespace-nowrap shadow-xs transition active:scale-95"
             >
-              + Take Another Order
+              <Plus className="w-3.5 h-3.5" />
+              <span>Take Another Order</span>
             </button>
           </div>
 
@@ -1004,12 +965,17 @@ export default function PosPage() {
                           {pending.label}
                         </span>
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap inline-flex items-center gap-1.5 shrink-0 ${
                             pending.isPrinted
-                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                              : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/60'
+                              : 'bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-200 border border-amber-300 dark:border-amber-700/60'
                           }`}
                         >
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              pending.isPrinted ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'
+                            }`}
+                          />
                           {pending.isPrinted ? 'Printed' : 'Not Printed Yet'}
                         </span>
                       </div>
@@ -1108,6 +1074,49 @@ export default function PosPage() {
       </div>
 
       {/* ======================================================== */}
+      {/* FLOATING MOBILE BOTTOM ACTION BAR (Always visible above bottom navigation) */}
+      {/* ======================================================== */}
+      {cartItems.length > 0 && activeView === 'catalog' && (
+        <div className="lg:hidden fixed bottom-[64px] left-3 right-3 z-30 animate-in slide-in-from-bottom-3 duration-200">
+          <div className="bg-zinc-900/95 dark:bg-zinc-900/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-2xl border border-zinc-700/80 flex items-center justify-between gap-2.5">
+            <div className="flex items-center gap-2.5 overflow-hidden">
+              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                {totals.itemCount}
+              </div>
+              <div className="truncate">
+                <div className="text-sm font-extrabold text-white flex items-center gap-1">
+                  <span>{formatCurrency(totals.grandTotal, settings.currencySymbol)}</span>
+                </div>
+                <div className="text-[11px] text-zinc-300 truncate">
+                  {totals.totalQuantity} items • {isWalkIn ? 'Walk-in' : selectedCustomer?.name}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleParkBill}
+                className="px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-xs font-semibold flex items-center gap-1 border border-zinc-700 active:scale-95 transition"
+                title="Hold bill and start next customer"
+              >
+                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                <span>Hold</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveView('cart')}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-950/40 active:scale-95 transition"
+              >
+                <span>View Bill ({cartItems.length})</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
       {/* 4. MODALS */}
       {/* ======================================================== */}
 
@@ -1151,7 +1160,7 @@ export default function PosPage() {
               />
             </div>
 
-            {/* Quick Discount Presets */}
+            {/* Quick Discount Presets in AED */}
             <div>
               <span className="text-[10px] uppercase font-bold text-zinc-400 block mb-1.5">
                 Quick Reductions:
@@ -1161,34 +1170,34 @@ export default function PosPage() {
                   type="button"
                   onClick={() =>
                     setNewCustomPriceInput(
+                      Math.max(0, editingPriceItem.originalPrice - 1).toString()
+                    )
+                  }
+                  className="py-1 px-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 rounded-lg text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                >
+                  -1 AED
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setNewCustomPriceInput(
+                      Math.max(0, editingPriceItem.originalPrice - 2).toString()
+                    )
+                  }
+                  className="py-1 px-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 rounded-lg text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                >
+                  -2 AED
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setNewCustomPriceInput(
                       Math.max(0, editingPriceItem.originalPrice - 5).toString()
                     )
                   }
                   className="py-1 px-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 rounded-lg text-xs font-semibold text-zinc-700 dark:text-zinc-300"
                 >
-                  -₹5
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setNewCustomPriceInput(
-                      Math.max(0, editingPriceItem.originalPrice - 10).toString()
-                    )
-                  }
-                  className="py-1 px-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 rounded-lg text-xs font-semibold text-zinc-700 dark:text-zinc-300"
-                >
-                  -₹10
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setNewCustomPriceInput(
-                      Math.max(0, editingPriceItem.originalPrice - 20).toString()
-                    )
-                  }
-                  className="py-1 px-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 rounded-lg text-xs font-semibold text-zinc-700 dark:text-zinc-300"
-                >
-                  -₹20
+                  -5 AED
                 </button>
                 <button
                   type="button"
@@ -1253,8 +1262,8 @@ export default function PosPage() {
             }}
             className={`p-3 rounded-xl border cursor-pointer transition flex items-center justify-between ${
               isWalkIn
-                ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/20'
-                : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50'
+                ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/80'
             }`}
           >
             <div>
@@ -1292,8 +1301,8 @@ export default function PosPage() {
                   }}
                   className={`p-2.5 rounded-xl border cursor-pointer transition flex items-center justify-between ${
                     selectedCustomer?.id === cust.id
-                      ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/20'
-                      : 'border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50'
+                      ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                      : 'border-zinc-100 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/80'
                   }`}
                 >
                   <div>
@@ -1325,7 +1334,7 @@ export default function PosPage() {
             <button
               type="button"
               onClick={() => setIsCustomerModalOpen(false)}
-              className="px-3 py-1.5 text-xs text-zinc-600 hover:bg-zinc-100 rounded-lg"
+              className="px-3 py-1.5 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition"
             >
               Cancel
             </button>
@@ -1387,7 +1396,7 @@ export default function PosPage() {
             <button
               type="button"
               onClick={() => setIsNewCustomerModalOpen(false)}
-              className="px-3 py-1.5 text-xs text-zinc-600 hover:bg-zinc-100 rounded-lg"
+              className="px-3 py-1.5 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition"
             >
               Cancel
             </button>

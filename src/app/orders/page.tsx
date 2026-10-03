@@ -202,7 +202,7 @@ export default function OrdersPage() {
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -289,7 +289,7 @@ export default function OrdersPage() {
                     <button
                       type="button"
                       onClick={toggleSelectAll}
-                      className="text-zinc-400 hover:text-zinc-600 flex items-center"
+                      className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center transition"
                     >
                       {allFilteredSelected ? (
                         <CheckSquare className="w-4 h-4 text-emerald-600" />
@@ -325,7 +325,7 @@ export default function OrdersPage() {
                         <button
                           type="button"
                           onClick={() => toggleSelectOrder(order.id)}
-                          className="text-zinc-400 hover:text-zinc-600 flex items-center"
+                          className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center transition"
                         >
                           {isSelected ? (
                             <CheckSquare className="w-4 h-4 text-emerald-600" />
@@ -384,7 +384,7 @@ export default function OrdersPage() {
 
                       {/* Payment */}
                       <td className="py-3 px-3">
-                        <span className="inline-block uppercase text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300">
+                        <span className="inline-block uppercase text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
                           {order.paymentMethod}
                         </span>
                       </td>
@@ -571,7 +571,7 @@ export default function OrdersPage() {
               <button
                 type="button"
                 onClick={() => setViewingOrder(null)}
-                className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-medium hover:bg-zinc-200"
+                className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
               >
                 Close
               </button>

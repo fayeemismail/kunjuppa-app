@@ -14,7 +14,9 @@ import {
   AlertTriangle,
   Receipt,
   Bluetooth,
+  LogOut,
 } from 'lucide-react';
+import { useAuthStore } from '@/store/authStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useProductStore } from '@/store/productStore';
 import { useCustomerStore } from '@/store/customerStore';
@@ -352,13 +354,35 @@ export default function SettingsPage() {
         </div>
       </div>
 
+      {/* Session Management */}
+      <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-3">
+        <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+          User Session
+        </h3>
+        <p className="text-xs text-zinc-500">
+          Sign out of this device. Your local database records remain safely preserved in LocalStorage.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            const { logout } = useAuthStore.getState();
+            logout();
+            window.location.href = '/login';
+          }}
+          className="flex items-center gap-2 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition shadow-xs"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>Sign Out / Logout Session</span>
+        </button>
+      </div>
+
       {/* Reset Confirmation Dialog */}
       <ConfirmDialog
         isOpen={isResetConfirmOpen}
         onClose={() => setIsResetConfirmOpen(false)}
         onConfirm={handleResetData}
         title="Reset All Data"
-        message="This will reset all products, customers, orders, and store settings back to the initial 18 products, 8 customers, and 5 orders. Any newly added records will be overwritten."
+        message="This will reset all products, customers, orders, and store settings back to the initial AED cigarette catalog. Any newly added records will be overwritten."
         confirmLabel="Reset Everything"
         variant="danger"
       />
